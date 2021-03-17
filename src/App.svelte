@@ -1,7 +1,10 @@
 <script lang="ts">
+  import InputColorMode from "./components/InputColorMode.svelte";
   import InputGroup from "./components/InputGroup.svelte";
   import InputInteger from "./components/InputInteger.svelte";
   import InputItem from "./components/InputItem.svelte";
+  import InputRadio from "./components/InputRadio.svelte";
+  import InputSelect from "./components/InputSelect.svelte";
 
   let canvas_wdt = 500;
   const canvas_wdt_id = "canvas_width";
@@ -16,15 +19,40 @@
   let cell_ratio = 0.75;
   const cell_ratio_id = "cell_ratio";
 
+  const colors = [
+    { value: "#ffffff", text: "Bianco" },
+    { value: "#000000", text: "Nero" },
+    { value: "#3366ff", text: "Azzurro" },
+    { value: "#66ff99", text: "Verde" },
+    { value: "#ff6666", text: "Rosso" },
+  ];
+
   const tiles = [
-    { id: "line", text: "Linea" },
-    { id: "wave", text: "Onda" },
-    { id: "peak", text: "Picco" },
+    { value: "line", text: "Linea", color: 2 },
+    { value: "wave", text: "Onda", color: 3 },
+    { value: "peak", text: "Picco", color: 4 },
   ];
 
   let line_num = 1;
   let wave_num = 1;
   let peak_num = 1;
+
+  const color_modes = [
+    { value: "tile", text: "Un colore per forma" },
+    { value: "distribution", text: "Distribuzione indipendente dalla forma" },
+  ];
+
+  let bg_color_mode = color_modes[1].value;
+  let fg_color_mode = color_modes[0].value;
+
+  // const bg_tile_preset = {
+
+  // }
+
+  let cd1 = [1, 2, 4, 5, 6];
+  let cd3 = [3, 5, 2, 9, 1];
+
+  const color_background_select_id = "bg_color_id";
 </script>
 
 <div>
@@ -60,9 +88,32 @@
   <InputGroup label={"Densità forme"}>
     {#each tiles as tile}
       <InputItem>
-        <label for="{tile.id}-num">{tile.text}</label>
-        <InputInteger id="{tile.id}-num" bind:value={line_num} />
+        <label for="{tile.value}-num">{tile.text}</label>
+        <InputInteger id="{tile.value}-num" bind:value={line_num} />
       </InputItem>
     {/each}
+  </InputGroup>
+
+  <!-- Colore tiles -->
+  <InputGroup label={"Colore forme"}>
+    <InputColorMode
+      {colors}
+      color_mode={fg_color_mode}
+      {color_modes}
+      {tiles}
+      bind:cd={cd1}
+    />
+  </InputGroup>
+  <p>{cd1}</p>
+
+  <!-- Colore sfondo -->
+  <InputGroup label={"Colore sfondo"}>
+    <InputColorMode
+      {colors}
+      color_mode={bg_color_mode}
+      {color_modes}
+      {tiles}
+      bind:cd={cd3}
+    />
   </InputGroup>
 </div>
