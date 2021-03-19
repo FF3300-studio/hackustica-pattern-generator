@@ -1,119 +1,149 @@
 <script lang="ts">
-  import InputColorMode from "./components/InputColorMode.svelte";
   import InputGroup from "./components/InputGroup.svelte";
-  import InputInteger from "./components/InputInteger.svelte";
   import InputItem from "./components/InputItem.svelte";
-  import InputRadio from "./components/InputRadio.svelte";
-  import InputSelect from "./components/InputSelect.svelte";
-
-  let canvas_wdt = 500;
-  const canvas_wdt_id = "canvas_width";
-  let canvas_hgt = 700;
-  const canvas_hgt_id = "canvas_height";
-
-  let grid_rows = 10;
-  const grid_rows_id = "grid_rows";
-  let grid_cols = 20;
-  const grid_cols_id = "grid_columns";
-
-  let cell_ratio = 0.75;
-  const cell_ratio_id = "cell_ratio";
-
-  const colors = [
-    { value: "#ffffff", text: "Bianco" },
-    { value: "#000000", text: "Nero" },
-    { value: "#3366ff", text: "Azzurro" },
-    { value: "#66ff99", text: "Verde" },
-    { value: "#ff6666", text: "Rosso" },
-  ];
+  import InputInteger from "./components/InputInteger.svelte";
+  import InputColor from "./components/InputColor.svelte";
 
   const tiles = [
-    { value: "line", text: "Linea", color: 2 },
-    { value: "wave", text: "Onda", color: 3 },
-    { value: "peak", text: "Picco", color: 4 },
+    { id: "line", name: "Linea" },
+    { id: "wave", name: "Onda" },
+    { id: "peak", name: "Picco" },
   ];
-
-  let line_num = 1;
-  let wave_num = 1;
-  let peak_num = 1;
 
   const color_modes = [
-    { value: "tile", text: "Un colore per forma" },
-    { value: "distribution", text: "Distribuzione indipendente dalla forma" },
+    { id: "tile", name: "Un colore per forma" },
+    {
+      id: "distribution",
+      name: "Distribuzione di colore indipendente dalla forma",
+    },
   ];
 
-  let bg_color_mode = color_modes[1].value;
-  let fg_color_mode = color_modes[0].value;
+  let colors = [
+    { id: "red", value: "#ff6666", name: "Rosso" },
+    { id: "green", value: "#66ff99", name: "Verde" },
+    { id: "blue", value: "#3366ff", name: "Blu" },
+    { id: "black", value: "#000000", name: "Nero" },
+    { id: "white", value: "#ffffff", name: "Bianco" },
+  ];
 
-  // const bg_tile_preset = {
-
-  // }
-
-  let cd1 = [1, 2, 4, 5, 6];
-  let cd3 = [3, 5, 2, 9, 1];
-
-  const color_background_select_id = "bg_color_id";
+  let config = {
+    canvas: {
+      width: 500,
+      height: 700,
+    },
+    grid: {
+      rows: 10,
+      columns: 10,
+      cell_ratio: 0.75,
+      cell_spacing: {
+        x: 0,
+        y: 0,
+      },
+    },
+    tiles: {
+      line: { density: 1 },
+      wave: { density: 1, squaring: 0.5, direction: "random" },
+      peak: { density: 1, squaring: 0.65, direction: "random" },
+    },
+    color: {
+      tiles: {
+        mode: "tile",
+        tile_config: {
+          line: "blue",
+          wave: "green",
+          peak: "red",
+        },
+        distribution_config: {
+          red: 1,
+          green: 1,
+          blue: 1,
+          black: 0,
+          white: 0,
+        },
+      },
+      background: {
+        mode: "distribution",
+        tile_config: {
+          line: "blue",
+          wave: "green",
+          peak: "red",
+        },
+        distribution_config: {
+          red: 0,
+          green: 0,
+          blue: 0,
+          black: 0,
+          white: 1,
+        },
+      },
+    },
+    thicknesses: [0.1, 0.15, 0.2, 0.25, 0.3, 0.35],
+  };
 </script>
 
-<div>
-  <!-- Canvas -->
-  <InputGroup label={"Tavola disegno"}>
-    <!--  -->
-    <InputItem>
-      <label for={canvas_wdt_id}>Larghezza</label>
-      <InputInteger id={canvas_wdt_id} bind:value={canvas_wdt} />
-    </InputItem>
-    <!--  -->
-    <InputItem>
-      <label for={canvas_hgt_id}>Altezza</label>
-      <InputInteger id={canvas_hgt_id} bind:value={canvas_hgt} />
-    </InputItem>
-  </InputGroup>
+<!-- Canvas -->
+<InputGroup label={"Tavola disegno"}>
+  <!--  -->
+  <InputItem>
+    <label for="canvas_width">Larghezza</label>
+    <InputInteger id="canvas_width" bind:value={config.canvas.width} />
+  </InputItem>
+  <!--  -->
+  <InputItem>
+    <label for="canvas_height">Altezza</label>
+    <InputInteger id="canvas_height" bind:value={config.canvas.height} />
+  </InputItem>
+</InputGroup>
 
-  <!-- Grid -->
-  <InputGroup label={"Griglia"}>
-    <!--  -->
+<!-- Grid -->
+<InputGroup label={"Griglia"}>
+  <!--  -->
+  <InputItem>
+    <label for="grid_rows">Righe</label>
+    <InputInteger id="grid_rows" bind:value={config.grid.rows} />
+  </InputItem>
+  <!--  -->
+  <InputItem>
+    <label for="grid_columns">Colonne</label>
+    <InputInteger id="grid_columns" bind:value={config.grid.columns} />
+  </InputItem>
+</InputGroup>
+
+<!-- Densità -->
+<InputGroup label={"Densità forme"}>
+  {#each tiles as tile}
     <InputItem>
-      <label for={grid_rows_id}>Righe</label>
-      <InputInteger id={grid_rows_id} bind:value={grid_rows} />
+      <label for="{tile.id}_density">{tile.name}</label>
+      <InputInteger
+        id="{tile.id}_density"
+        bind:value={config.tiles[tile.id].density}
+      />
     </InputItem>
-    <!--  -->
-    <InputItem>
-      <label for={grid_cols_id}>Colonne</label>
-      <InputInteger id={grid_cols_id} bind:value={grid_cols} />
-    </InputItem>
-  </InputGroup>
+  {/each}
+</InputGroup>
 
-  <!-- Densità -->
-  <InputGroup label={"Densità forme"}>
-    {#each tiles as tile}
-      <InputItem>
-        <label for="{tile.value}-num">{tile.text}</label>
-        <InputInteger id="{tile.value}-num" bind:value={line_num} />
-      </InputItem>
-    {/each}
-  </InputGroup>
+<!-- Colore tiles -->
+<InputGroup label={"Colore forme"}>
+  <InputColor
+    {color_modes}
+    {tiles}
+    {colors}
+    bind:color_mode={config.color.tiles.mode}
+    bind:tile_config={config.color.tiles.tile_config}
+    bind:distribution_config={config.color.tiles.distribution_config}
+  />
+</InputGroup>
 
-  <!-- Colore tiles -->
-  <InputGroup label={"Colore forme"}>
-    <InputColorMode
-      {colors}
-      color_mode={fg_color_mode}
-      {color_modes}
-      {tiles}
-      bind:cd={cd1}
-    />
-  </InputGroup>
-  <p>{cd1}</p>
+<!-- Colore sfondo -->
+<InputGroup label={"Colore sfondo"}>
+  <InputColor
+    {color_modes}
+    {tiles}
+    {colors}
+    bind:color_mode={config.color.background.mode}
+    bind:tile_config={config.color.background.tile_config}
+    bind:distribution_config={config.color.background.distribution_config}
+  />
+</InputGroup>
 
-  <!-- Colore sfondo -->
-  <InputGroup label={"Colore sfondo"}>
-    <InputColorMode
-      {colors}
-      color_mode={bg_color_mode}
-      {color_modes}
-      {tiles}
-      bind:cd={cd3}
-    />
-  </InputGroup>
-</div>
+{JSON.stringify(config, null, 4)}
