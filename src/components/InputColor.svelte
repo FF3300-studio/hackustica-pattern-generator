@@ -1,6 +1,9 @@
 <script lang="ts">
   /* --- Imports --- */
 
+  // Modules
+  import { nanoid } from "nanoid";
+
   // Svelte
   import InputItem from "./InputItem.svelte";
   import InputInteger from "./InputInteger.svelte";
@@ -25,6 +28,9 @@
     { value: "#ffffff", name: "Bianco" },
     { value: "#000000", name: "Nero" },
   ];
+
+  // Id for select
+  const id: string = nanoid(5);
 </script>
 
 <!-- Radio buttons to select the color mode -->
@@ -41,8 +47,8 @@
 {#if colorConfig.mode == "tile"}
   {#each Tiles as t}
     <InputItem>
-      <label>{tiles_text[t]}</label>
-      <select bind:value={colorConfig.tile[t]}>
+      <label for={id}>{tiles_text[t]}</label>
+      <select {id} bind:value={colorConfig.tile[t]}>
         {#each colors as c}
           <option
             value={c.value}
