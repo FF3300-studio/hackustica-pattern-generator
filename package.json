@@ -25,6 +25,9 @@
     "typescript": "^4.0.0"
   },
   "dependencies": {
+    "nanoid": "^3.1.22",
+    "paper": "^0.12.15",
+    "rollup-plugin-node-globals": "^1.4.0",
     "sirv-cli": "^1.0.0"
   }
 }

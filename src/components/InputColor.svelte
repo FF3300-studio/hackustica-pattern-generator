@@ -1,52 +1,73 @@
 <script lang="ts">
+  /* --- Imports --- */
+
+  // Svelte
   import InputItem from "./InputItem.svelte";
   import InputInteger from "./InputInteger.svelte";
 
-  export let color_mode: string;
-  export let color_modes: Array<{ id: string; name: string }>;
+  // TS / UI
+  import type { ColorConfig } from "../ts/ui/InputConfig";
+  import { tiles_text, colorModes_text } from "../ts/ui/text";
 
-  export let tiles: Array<{ id: string; name: string }>;
-  export let colors: Array<{ id: string; value: string; name: string }>;
+  // TS / Logic
+  import { Tiles, ColorModes } from "../ts/app/index";
 
-  export let tile_config: Record<string, string>;
-  export let distribution_config: Record<string, number>;
+  /* --- Component parameters --- */
+
+  export let colorConfig: ColorConfig;
+
+  /* --- Logic --- */
+
+  const colors = [
+    { value: "#3366ff", name: "Blu" },
+    { value: "#66ff99", name: "Verde" },
+    { value: "#ff6666", name: "Rosso" },
+    { value: "#ffffff", name: "Bianco" },
+    { value: "#000000", name: "Nero" },
+  ];
 </script>
 
 <!-- Radio buttons to select the color mode -->
 <InputItem>
-  {#each color_modes as item}
-    <label>
-      <input type="radio" bind:group={color_mode} value={item.id} />
-      {item.name}
+  {#each ColorModes as cm}
+    <label class="radio">
+      <input type="radio" bind:group={colorConfig.mode} value={cm} />
+      {colorModes_text[cm]}
     </label>
   {/each}
 </InputItem>
 
-<!-- If colormode is tile, we select a color for each tile -->
-{#if color_mode == "tile"}
-  {#each tiles as tile}
+<!-- If colormode is tile, we set color for each tile -->
+{#if colorConfig.mode == "tile"}
+  {#each Tiles as t}
     <InputItem>
-      <label>{tile.name}</label>
-      <select bind:value={tile_config[tile.id]}>
-        {#each colors as color}
+      <label>{tiles_text[t]}</label>
+      <select bind:value={colorConfig.tile[t]}>
+        {#each colors as c}
           <option
-            value={color.id}
-            selected={color.id == tile_config[tile.id] ? true : undefined}
-            >{color.name}</option
+            value={c.value}
+            selected={c.value == colorConfig.tile[t] ? true : undefined}
+            >{c.name}</option
           >
         {/each}
       </select>
     </InputItem>
   {/each}
   <!-- If colormode is distribution, for each color we specify its distribution -->
-{:else if color_mode == "distribution"}
+{:else if colorConfig.mode == "distribution"}
   {#each colors as color}
     <InputItem>
-      <label>{color.name}</label>
       <InputInteger
-        id={"bg-" + color.value}
-        bind:value={distribution_config[color.id]}
+        label={color.name}
+        bind:value={colorConfig.distribution[color.value]}
       />
     </InputItem>
   {/each}
 {/if}
+
+<style>
+  .radio {
+    display: flex;
+    flex-flow: row nowrap;
+  }
+</style>
