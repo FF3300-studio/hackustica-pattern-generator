@@ -1,4 +1,4 @@
-import type { Tile, Direction, ColorMode } from "../app/index";
+import type { Tile, Direction, ColorMode } from "../app/defs";
 
 export interface ColorConfig {
   mode: ColorMode;

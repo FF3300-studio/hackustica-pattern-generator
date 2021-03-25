@@ -1,6 +1,7 @@
 <script lang="ts">
   /* --- Imports --- */
   import paper from "paper";
+  import { nanoid } from "nanoid";
 
   // Svelts imports
   import InputGroup from "./components/InputGroup.svelte";
@@ -9,11 +10,13 @@
   import InputColor from "./components/InputColor.svelte";
 
   // TS / UI imports
-  import type { InputConfig } from "./ts/ui/InputConfig";
+  import type { InputConfig } from "./ts/ui/configs";
   import { tiles_text } from "./ts/ui/text";
 
   // TS / Logic imports
-  import { Tiles, Directions, ColorModes } from "./ts/app/index";
+  import { Tiles, Directions, ColorModes } from "./ts/app/defs";
+  import { createCanvas, deleteCanvas } from "./ts/ui/crudCanvas";
+  import CanvasGrid from "./ts/ui/CanvasGrid";
 
   /* --- Logic --- */
 
@@ -70,6 +73,11 @@
     },
     thicknesses: [0.1, 0.15, 0.2, 0.25, 0.3, 0.35],
   };
+
+  // Canvas ID
+  const canvas_id = "hackanvas";
+  const canvas_parent_id = "output";
+  let canvas: HTMLCanvasElement;
 </script>
 
 <main>
@@ -78,7 +86,21 @@
   <!-- Input -->
   <div class="input">
     <!-- Canvas -->
-    <!-- <button on:click={handleDraw}>Disegna!</button> -->
+    <button
+      on:click={() => {
+        // Creating new canvas
+        // const canvas_parent = document.getElementById(canvas_parent_id);
+        // deleteCanvas(canvas_id);
+        // canvas = createCanvas(
+        //   canvas_id,
+        //   canvas_parent,
+        //   config.canvas.width,
+        //   config.canvas.height
+        // );
+        // Creating the CanvasGrid object
+        // console.log(new CanvasGrid());
+      }}>Disegna!</button
+    >
 
     <!-- Canvas -->
     <InputGroup label={"Tavola disegno"}>
@@ -130,11 +152,7 @@
   </div>
 
   <!-- Output -->
-  <div class="output">
-    <pre>
-      {JSON.stringify(config, null, 4)}
-    </pre>
-  </div>
+  <div id="output" />
 
   <!--  -->
 </main>

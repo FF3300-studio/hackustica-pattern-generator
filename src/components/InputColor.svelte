@@ -9,11 +9,11 @@
   import InputInteger from "./InputInteger.svelte";
 
   // TS / UI
-  import type { ColorConfig } from "../ts/ui/InputConfig";
+  import type { ColorConfig } from "../ts/ui/configs";
   import { tiles_text, colorModes_text } from "../ts/ui/text";
 
   // TS / Logic
-  import { Tiles, ColorModes } from "../ts/app/index";
+  import { Tiles, ColorModes } from "../ts/app/defs";
 
   /* --- Component parameters --- */
 

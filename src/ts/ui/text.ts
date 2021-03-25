@@ -1,4 +1,4 @@
-import type { Tile, Direction, ColorMode } from "../app/index";
+import type { Tile, Direction, ColorMode } from "../app/defs";
 
 export const tiles_text: Record<Tile, string> = {
   line: "Linea",
