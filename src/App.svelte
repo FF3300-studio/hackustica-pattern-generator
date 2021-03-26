@@ -15,8 +15,7 @@
 
   // TS / Logic imports
   import { Tiles, Directions, ColorModes } from "./ts/app/defs";
-  import { createCanvas, deleteCanvas } from "./ts/ui/crudCanvas";
-  import CanvasGrid from "./ts/ui/CanvasGrid";
+  import { draw } from "./ts/app/index";
 
   /* --- Logic --- */
 
@@ -48,10 +47,10 @@
           peak: "#ff6666",
         },
         distribution: {
-          "#3366ff": 0,
-          "#66ff99": 0,
-          "#ff6666": 0,
-          "#ffffff": 1,
+          "#3366ff": 1,
+          "#66ff99": 1,
+          "#ff6666": 1,
+          "#ffffff": 0,
           "#000000": 0,
         },
       },
@@ -74,10 +73,9 @@
     thicknesses: [0.1, 0.15, 0.2, 0.25, 0.3, 0.35],
   };
 
-  // Canvas ID
-  const canvas_id = "hackanvas";
-  const canvas_parent_id = "output";
-  let canvas: HTMLCanvasElement;
+  function handleDraw(): void {
+    draw(config);
+  }
 </script>
 
 <main>
@@ -86,21 +84,7 @@
   <!-- Input -->
   <div class="input">
     <!-- Canvas -->
-    <button
-      on:click={() => {
-        // Creating new canvas
-        // const canvas_parent = document.getElementById(canvas_parent_id);
-        // deleteCanvas(canvas_id);
-        // canvas = createCanvas(
-        //   canvas_id,
-        //   canvas_parent,
-        //   config.canvas.width,
-        //   config.canvas.height
-        // );
-        // Creating the CanvasGrid object
-        // console.log(new CanvasGrid());
-      }}>Disegna!</button
-    >
+    <button on:click={handleDraw}>Disegna!</button>
 
     <!-- Canvas -->
     <InputGroup label={"Tavola disegno"}>
