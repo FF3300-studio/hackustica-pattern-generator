@@ -1,5 +1,11 @@
 <script lang="ts">
   export let label: string;
+
+  import { createEventDispatcher } from "svelte";
+  const dispatch = createEventDispatcher();
+  function dispatchUpdate() {
+    dispatch("update");
+  }
 </script>
 
 <div class="box">

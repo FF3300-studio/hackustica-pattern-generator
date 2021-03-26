@@ -1,80 +1,29 @@
 <script lang="ts">
   /* --- Imports --- */
-  import paper from "paper";
-  import { nanoid } from "nanoid";
 
-  // Svelts imports
+  // Stores with data
+  import { PatternStore, TextStore } from "./stores";
+
+  // Svelte imports
   import InputGroup from "./components/InputGroup.svelte";
   import InputItem from "./components/InputItem.svelte";
   import InputInteger from "./components/InputInteger.svelte";
+  import InputFloat from "./components/InputFloat.svelte";
   import InputColor from "./components/InputColor.svelte";
+  import InputCRUD from "./components/InputCRUD.svelte";
 
   // TS / UI imports
-  import type { InputConfig } from "./ts/ui/configs";
-  import { tiles_text } from "./ts/ui/text";
+  import { downloadSVG } from "./ts/app/download";
 
   // TS / Logic imports
-  import { Tiles, Directions, ColorModes } from "./ts/app/defs";
-  import { draw } from "./ts/app/index";
+  import { Tiles } from "./ts/app/defs";
+  // import { draw } from "./ts/app/index";
 
   /* --- Logic --- */
 
-  let config: InputConfig = {
-    canvas: {
-      width: 500,
-      height: 700,
-    },
-    grid: {
-      rows: 10,
-      columns: 10,
-      cell_ratio: 0.75,
-      cell_spacing: {
-        x: 0,
-        y: 0,
-      },
-    },
-    tiles: {
-      line: { density: 1 },
-      wave: { density: 1, squaring: 0.5, direction: "random" },
-      peak: { density: 1, squaring: 0.65, direction: "random" },
-    },
-    color: {
-      tiles: {
-        mode: "tile",
-        tile: {
-          line: "#3366ff",
-          wave: "#66ff99",
-          peak: "#ff6666",
-        },
-        distribution: {
-          "#3366ff": 1,
-          "#66ff99": 1,
-          "#ff6666": 1,
-          "#ffffff": 0,
-          "#000000": 0,
-        },
-      },
-      background: {
-        mode: "distribution",
-        tile: {
-          line: "#3366ff",
-          wave: "#66ff99",
-          peak: "#ff6666",
-        },
-        distribution: {
-          "#3366ff": 0,
-          "#66ff99": 0,
-          "#ff6666": 0,
-          "#ffffff": 1,
-          "#000000": 0,
-        },
-      },
-    },
-    thicknesses: [0.1, 0.15, 0.2, 0.25, 0.3, 0.35],
-  };
-
   function handleDraw(): void {
-    draw(config);
+    console.log("Drawin");
+    // draw(config);
   }
 </script>
 
@@ -84,17 +33,26 @@
   <!-- Input -->
   <div class="input">
     <!-- Canvas -->
-    <button on:click={handleDraw}>Disegna!</button>
+    <button class="btn-draw" on:click={handleDraw}>Disegna!</button>
+    <button class="btn-svg" on:click={downloadSVG}>SVG</button>
 
     <!-- Canvas -->
     <InputGroup label={"Tavola disegno"}>
       <!--  -->
       <InputItem>
-        <InputInteger label="Larghezza" bind:value={config.canvas.width} />
+        <InputInteger
+          label="Larghezza"
+          on:update={handleDraw}
+          bind:value={$PatternStore.canvas.width}
+        />
       </InputItem>
       <!--  -->
       <InputItem>
-        <InputInteger label="Altezza" bind:value={config.canvas.height} />
+        <InputInteger
+          label="Altezza"
+          on:update={handleDraw}
+          bind:value={$PatternStore.canvas.height}
+        />
       </InputItem>
       <!--  -->
     </InputGroup>
@@ -103,11 +61,27 @@
     <InputGroup label={"Griglia"}>
       <!--  -->
       <InputItem>
-        <InputInteger label="Righe" bind:value={config.grid.rows} />
+        <InputInteger
+          label="Righe"
+          on:update={handleDraw}
+          bind:value={$PatternStore.grid.rows}
+        />
       </InputItem>
       <!--  -->
       <InputItem>
-        <InputInteger label="Colonne" bind:value={config.grid.columns} />
+        <InputInteger
+          label="Colonne"
+          on:update={handleDraw}
+          bind:value={$PatternStore.grid.columns}
+        />
+      </InputItem>
+      <!--  -->
+      <InputItem>
+        <InputFloat
+          label="Distanza tra le colonne"
+          on:update={handleDraw}
+          bind:value={$PatternStore.grid.spacing.column}
+        />
       </InputItem>
       <!--  -->
     </InputGroup>
@@ -117,8 +91,9 @@
       {#each Tiles as t}
         <InputItem>
           <InputInteger
-            label={tiles_text[t]}
-            bind:value={config.tiles[t].density}
+            label={$TextStore.tiles[t]}
+            on:update={handleDraw}
+            bind:value={$PatternStore.tiles[t].density}
           />
         </InputItem>
       {/each}
@@ -126,17 +101,29 @@
 
     <!-- Colore tiles -->
     <InputGroup label={"Colore forme"}>
-      <InputColor bind:colorConfig={config.color.tiles} />
+      <InputColor on:update={handleDraw} scope="tiles" />
     </InputGroup>
 
     <!-- Colore sfondo -->
     <InputGroup label={"Colore sfondo"}>
-      <InputColor bind:colorConfig={config.color.background} />
+      <InputColor on:update={handleDraw} scope="background" />
+    </InputGroup>
+
+    <!-- Thicknesses -->
+    <InputGroup label={"Spessori"}>
+      <InputCRUD
+        on:update={handleDraw}
+        bind:array={$PatternStore.thicknesses}
+      />
     </InputGroup>
   </div>
 
   <!-- Output -->
-  <div id="output" />
+  <div id="output">
+    <pre>
+      {JSON.stringify($PatternStore, null, 4)}
+    </pre>
+  </div>
 
   <!--  -->
 </main>
@@ -148,6 +135,23 @@
   }
 
   .input {
-    max-width: 300px;
+    flex-shrink: 0;
+    flex-basis: 200px;
+    background-color: palegoldenrod;
+    padding: var(--aria);
+  }
+
+  #output {
+    flex-grow: 1;
+    background-color: pink;
+  }
+
+  button {
+    display: block;
+    width: 100%;
+  }
+
+  .btn-draw {
+    margin-bottom: calc(var(--aria) / 2);
   }
 </style>

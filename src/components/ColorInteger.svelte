@@ -10,7 +10,7 @@
    * Parameters
    */
 
-  export let label: string;
+  export let color: string;
   export let value: number;
 
   /**
@@ -27,7 +27,7 @@
   const id: string = nanoid(5);
 </script>
 
-<label for={id}>{label}</label>
+<label for={id} style="background-color:{color}; color:{color}">{color}</label>
 <input
   {id}
   type="number"
