@@ -44,7 +44,7 @@
 <!-- Radio buttons to select the color mode -->
 <InputItem>
   {#each ColorModes as cm}
-    <label class="radio">
+    <label class="radio__label">
       <input
         type="radio"
         on:change={dispatchUpdate}
@@ -57,32 +57,62 @@
 </InputItem>
 
 <!-- If colormode is tile, we set color for each tile -->
-{#if $PatternStore.color[scope].mode == "tile"}
-  {#each Tiles as t}
-    <InputItem>
-      <label for={ids[t]}>{$TextStore.tiles[t]}</label>
-      <ColorDropdown
-        bind:color={$PatternStore.color[scope].tile[t]}
-        on:update={dispatchUpdate}
-      />
-    </InputItem>
-  {/each}
-  <!-- If colormode is distribution, for each color we specify its distribution -->
-{:else if $PatternStore.color[scope].mode == "distribution"}
-  {#each $DefaultColorsStore as color}
-    <InputItem>
-      <ColorInteger
-        {color}
-        on:update={dispatchUpdate}
-        bind:value={$PatternStore.color[scope].distribution[color]}
-      />
-    </InputItem>
-  {/each}
-{/if}
+<div class="mt-2">
+  {#if $PatternStore.color[scope].mode == "tile"}
+    {#each Tiles as t}
+      <InputItem>
+        <label for={ids[t]}>{$TextStore.tiles[t]}</label>
+        <ColorDropdown
+          bind:color={$PatternStore.color[scope].tile[t]}
+          on:update={dispatchUpdate}
+        />
+      </InputItem>
+    {/each}
+    <!-- If colormode is distribution, for each color we specify its distribution -->
+  {:else if $PatternStore.color[scope].mode == "distribution"}
+    {#each $DefaultColorsStore as color}
+      <InputItem>
+        <ColorInteger
+          {color}
+          on:update={dispatchUpdate}
+          bind:value={$PatternStore.color[scope].distribution[color]}
+        />
+      </InputItem>
+    {/each}
+  {/if}
+</div>
 
 <style>
   .radio {
     display: flex;
     flex-flow: row nowrap;
+  }
+
+  input[type="radio"] {
+    margin-right: calc(var(--aria) / 2);
+  }
+
+  .radio__label {
+    margin-bottom: calc(var(--aria) / 2);
+    display: flex;
+    flex-flow: row-reverse nowrap;
+    justify-content: space-between;
+    align-items: center;
+    min-height: var(--input-h);
+    background-color: var(--cds-ui-02);
+    border-radius: var(--round-s);
+    padding: 5px 10px;
+  }
+
+  .radio__label:hover {
+    background-color: var(--cds-ui-03);
+  }
+
+  label:last-child {
+    margin-bottom: 0;
+  }
+
+  .mt-2 {
+    margin-top: var(--aria);
   }
 </style>

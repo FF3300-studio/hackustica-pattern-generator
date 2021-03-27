@@ -1,7 +1,65 @@
+@font-face {
+  font-family: "IBMPlex";
+  src: url("./fonts/IBMPlexSans-Regular.ttf");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "IBMPlex";
+  src: url("./fonts/IBMPlexSans-Medium.ttf");
+  font-weight: 500;
+  font-style: normal;
+}
+
 * {
-  --aria: 10px;
+  --aria: 16px;
+  --input-w: 5em;
+  --input-h: 2em;
+  --round: 2px;
+  --round-s: 2px;
+
+  --cds-ui-background: #262626;
+
+  --cds-ui-01: #393939;
+  --cds-ui-02: #525252;
+  --cds-ui-03: #626262;
+
+  --cds-text-01: #f4f4f4;
+  --cds-text-02: #c6c6c6;
+  --cds-text-03: #6f6f6f;
+
+  font-family: "IBMPlex";
+  font-weight: 400;
+  font-style: normal;
+  line-height: 1.2em;
+  color: var(--cds-text-01);
 }
 
 #hackanvas {
   background-color: gray;
+  /* margin: calc(var(--aria) * 5);
+  overflow: auto; */
+}
+
+.input__number {
+  width: var(--input-w);
+  height: var(--input-h);
+  background-color: var(--cds-ui-02);
+  border: none;
+  color: white;
+  border-radius: var(--round-s);
+  padding: 5px 10px;
+  transition: 0.2s all;
+}
+
+.input__number:hover {
+  background-color: var(--cds-ui-03);
+}
+
+.flex-between {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-items: baseline;
 }

@@ -1,25 +1,22 @@
 <script lang="ts">
   export let label: string;
-
-  import { createEventDispatcher } from "svelte";
-  const dispatch = createEventDispatcher();
-  function dispatchUpdate() {
-    dispatch("update");
-  }
 </script>
 
 <div class="box">
-  <p><strong>{label}</strong></p>
+  <h3>{label}</h3>
   <slot />
 </div>
 
 <style>
-  /* .box {
-    width: fit-content;
-    border: 1px solid #aaa;
-    border-radius: 2px;
-    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
-    padding: 1em;
-    margin: 0 0 1em 0;
-  } */
+  div {
+    background-color: var(--cds-ui-01);
+    border-radius: var(--round);
+    margin-bottom: var(--aria);
+    padding: var(--aria);
+  }
+  h3 {
+    margin: 0;
+    font-weight: 500;
+    margin-bottom: var(--aria);
+  }
 </style>

@@ -60,6 +60,22 @@ export class Size {
     }
     return new Size(width, height);
   }
+
+  fillSize(ratio: number): Size {
+    let width: number;
+    let height: number;
+    //
+    if (this.ratio > ratio) {
+      width = this.width;
+      height = width / ratio;
+    }
+    //
+    else {
+      height = this.height;
+      width = height * ratio;
+    }
+    return new Size(width, height);
+  }
 }
 
 export class Rectangle {
@@ -102,6 +118,16 @@ export class Rectangle {
   fitRectangleCenter(ratio: number): Rectangle {
     // Getting the base size
     const size = this.size.fitSize(ratio);
+    // Then we calculate its new x & y
+    const x = this.origin.x + (this.width - size.width) / 2;
+    const y = this.origin.y + (this.height - size.height) / 2;
+    //
+    return new Rectangle(new Point(x, y), size);
+  }
+
+  fillRectangleCenter(ratio: number): Rectangle {
+    // Getting the base size
+    const size = this.size.fillSize(ratio);
     // Then we calculate its new x & y
     const x = this.origin.x + (this.width - size.width) / 2;
     const y = this.origin.y + (this.height - size.height) / 2;

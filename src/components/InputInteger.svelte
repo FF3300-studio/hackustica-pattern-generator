@@ -27,12 +27,24 @@
   const id: string = nanoid(5);
 </script>
 
-<label for={id}>{label}</label>
-<input
-  {id}
-  type="number"
-  on:change={dispatchUpdate}
-  bind:value
-  min="0"
-  step="1"
-/>
+<div>
+  <label for={id}>{label}</label>
+  <input
+    {id}
+    class="input__number"
+    type="number"
+    on:change={dispatchUpdate}
+    bind:value
+    min="0"
+    step="1"
+  />
+</div>
+
+<style>
+  div {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+</style>

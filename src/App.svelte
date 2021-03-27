@@ -137,7 +137,7 @@
   .input {
     flex-shrink: 0;
     flex-basis: 300px;
-    background-color: palegoldenrod;
+    background-color: var(--cds-ui-background);
     overflow: auto;
     padding: 0 var(--aria);
     padding-bottom: var(--aria);
@@ -146,6 +146,11 @@
   #output {
     flex-grow: 1;
     background-color: pink;
+    /* overflow: auto;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-items: center; */
   }
 
   button {
@@ -156,7 +161,7 @@
   .btns {
     position: sticky;
     top: 0;
-    background-color: palegoldenrod;
+    background-color: var(--cds-ui-background);
     padding: var(--aria) 0;
   }
 

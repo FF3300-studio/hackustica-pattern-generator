@@ -27,12 +27,15 @@
   const id: string = nanoid(5);
 </script>
 
-<label for={id}>{label}</label>
-<input
-  {id}
-  type="number"
-  on:change={dispatchUpdate}
-  bind:value
-  min="0"
-  step="0.01"
-/>
+<div class="flex-between">
+  <label for={id}>{label}</label>
+  <input
+    {id}
+    class="input__number"
+    type="number"
+    on:change={dispatchUpdate}
+    bind:value
+    min="0"
+    step="0.01"
+  />
+</div>
