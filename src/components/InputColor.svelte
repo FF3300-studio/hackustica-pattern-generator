@@ -60,13 +60,11 @@
 <div class="mt-2">
   {#if $PatternStore.color[scope].mode == "tile"}
     {#each Tiles as t}
-      <InputItem>
-        <label for={ids[t]}>{$TextStore.tiles[t]}</label>
-        <ColorDropdown
-          bind:color={$PatternStore.color[scope].tile[t]}
-          on:update={dispatchUpdate}
-        />
-      </InputItem>
+      <ColorDropdown
+        label={$TextStore.tiles[t]}
+        bind:color={$PatternStore.color[scope].tile[t]}
+        on:update={dispatchUpdate}
+      />
     {/each}
     <!-- If colormode is distribution, for each color we specify its distribution -->
   {:else if $PatternStore.color[scope].mode == "distribution"}
@@ -88,10 +86,6 @@
     flex-flow: row nowrap;
   }
 
-  input[type="radio"] {
-    margin-right: calc(var(--aria) / 2);
-  }
-
   .radio__label {
     margin-bottom: calc(var(--aria) / 2);
     display: flex;
@@ -101,7 +95,7 @@
     min-height: var(--input-h);
     background-color: var(--cds-ui-02);
     border-radius: var(--round-s);
-    padding: 5px 10px;
+    padding: 10px;
   }
 
   .radio__label:hover {

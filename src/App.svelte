@@ -30,8 +30,12 @@
   <div class="input">
     <!-- Canvas -->
     <div class="btns">
-      <button class="btn-draw" on:click={handleDraw}>Disegna!</button>
-      <button class="btn-svg" on:click={downloadSVG}>SVG</button>
+      <button class="button-main w-100 btn-draw" on:click={handleDraw}
+        >Disegna!</button
+      >
+      <button class="button-main w-100 btn-svg" on:click={downloadSVG}
+        >SVG</button
+      >
     </div>
 
     <!-- Canvas -->
@@ -145,7 +149,8 @@
 
   #output {
     flex-grow: 1;
-    background-color: pink;
+    background-color: var(--cds-text-01);
+    overflow: auto;
     /* overflow: auto;
     display: flex;
     flex-flow: row nowrap;

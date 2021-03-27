@@ -11,20 +11,24 @@
 </script>
 
 <div>
-  {#each array as item}
-    <div class="row">
-      <p>{item}</p>
-      <button
-        on:click={() => {
-          array = array.filter((i) => i !== item);
-          dispatchUpdate();
-        }}>-</button
-      >
-    </div>
-  {/each}
-  <div class="row">
-    <input type="number" bind:value={add} />
+  <div class="columns">
+    {#each array as item}
+      <div class="row">
+        <p>{item}</p>
+        <button
+          class="button-main"
+          on:click={() => {
+            array = array.filter((i) => i !== item);
+            dispatchUpdate();
+          }}>-</button
+        >
+      </div>
+    {/each}
+  </div>
+  <div class="row row-input">
+    <input class="input__number" type="number" bind:value={add} />
     <button
+      class="button-main"
       on:click={() => {
         array = [...array, add];
         dispatchUpdate();
@@ -38,16 +42,31 @@
     margin: 0;
   }
 
+  button {
+    width: var(--input-h);
+  }
+
+  .columns {
+    columns: 2;
+    column-gap: calc(var(--aria) * 2);
+  }
+
   .row {
     display: flex;
     flex-flow: row nowrap;
     justify-content: space-between;
+    align-items: center;
+    break-inside: avoid;
 
-    border-top: 1px solid black;
     padding: 5px 0;
   }
 
-  button {
-    width: 2em;
+  .row-input {
+    margin-top: var(--aria);
+  }
+
+  input {
+    flex-grow: 1;
+    margin-right: var(--aria);
   }
 </style>

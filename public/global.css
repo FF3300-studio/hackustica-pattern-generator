@@ -29,17 +29,35 @@
   --cds-text-02: #c6c6c6;
   --cds-text-03: #6f6f6f;
 
+  --cds-focus: #0f62fe;
+
   font-family: "IBMPlex";
   font-weight: 400;
   font-style: normal;
-  line-height: 1.2em;
+  line-height: 1.3em;
   color: var(--cds-text-01);
 }
 
 #hackanvas {
-  background-color: gray;
-  /* margin: calc(var(--aria) * 5);
-  overflow: auto; */
+  background-color: var(--cds-text-02);
+  margin: var(--aria);
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.button-main {
+  height: var(--input-h);
+  background-color: var(--cds-ui-02);
+  border: none;
+  border-radius: var(--round-s);
+  padding: 5px 10px;
+  transition: 0.2s background-color;
+}
+
+.button-main:hover {
+  background-color: var(--cds-ui-03);
 }
 
 .input__number {
@@ -47,10 +65,8 @@
   height: var(--input-h);
   background-color: var(--cds-ui-02);
   border: none;
-  color: white;
   border-radius: var(--round-s);
   padding: 5px 10px;
-  transition: 0.2s all;
 }
 
 .input__number:hover {

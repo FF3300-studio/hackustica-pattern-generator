@@ -2,8 +2,8 @@ import { writable } from "svelte/store";
 
 export const PatternStore = writable({
   canvas: {
-    width: 400,
-    height: 300,
+    width: 600,
+    height: 450,
   },
   grid: {
     rows: 10,
