@@ -12,19 +12,15 @@
   import InputColor from "./components/InputColor.svelte";
   import InputCRUD from "./components/InputCRUD.svelte";
 
-  // TS / UI imports
-  import { downloadSVG } from "./ts/app/download";
-
   // TS / Logic imports
-  import { Tiles } from "./ts/app/defs";
-  // import { draw } from "./ts/app/index";
+  import { Tiles } from "./ts/defs";
 
-  /* --- Logic --- */
+  import { draw, handleDraw } from "./ts/index";
+  import { downloadSVG } from "./ts/download";
 
-  function handleDraw(): void {
-    console.log("Drawin");
-    // draw(config);
-  }
+  window.onload = function () {
+    draw();
+  };
 </script>
 
 <main>
@@ -33,8 +29,10 @@
   <!-- Input -->
   <div class="input">
     <!-- Canvas -->
-    <button class="btn-draw" on:click={handleDraw}>Disegna!</button>
-    <button class="btn-svg" on:click={downloadSVG}>SVG</button>
+    <div class="btns">
+      <button class="btn-draw" on:click={handleDraw}>Disegna!</button>
+      <button class="btn-svg" on:click={downloadSVG}>SVG</button>
+    </div>
 
     <!-- Canvas -->
     <InputGroup label={"Tavola disegno"}>
@@ -118,12 +116,13 @@
     </InputGroup>
   </div>
 
-  <!-- Output -->
-  <div id="output">
-    <pre>
+  <!-- Debug -->
+  <!-- <pre style="overflow:auto">
       {JSON.stringify($PatternStore, null, 4)}
-    </pre>
-  </div>
+    </pre> -->
+
+  <!-- Output -->
+  <div id="output" />
 
   <!--  -->
 </main>
@@ -132,13 +131,16 @@
   main {
     display: flex;
     flex-flow: row nowrap;
+    height: 100vh;
   }
 
   .input {
     flex-shrink: 0;
-    flex-basis: 200px;
+    flex-basis: 300px;
     background-color: palegoldenrod;
-    padding: var(--aria);
+    overflow: auto;
+    padding: 0 var(--aria);
+    padding-bottom: var(--aria);
   }
 
   #output {
@@ -149,6 +151,13 @@
   button {
     display: block;
     width: 100%;
+  }
+
+  .btns {
+    position: sticky;
+    top: 0;
+    background-color: palegoldenrod;
+    padding: var(--aria) 0;
   }
 
   .btn-draw {

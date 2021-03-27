@@ -1,3 +1,7 @@
 * {
   --aria: 10px;
 }
+
+#hackanvas {
+  background-color: gray;
+}

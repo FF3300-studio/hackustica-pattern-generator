@@ -1,6 +1,5 @@
-import type { InputConfig } from "../ui/configs";
-import { deleteCanvas, createCanvas } from "../ui/crudCanvas";
-import { Point, Size, Rectangle, UnitGrid } from "../modules/canvasgrid";
+import { deleteCanvas, createCanvas } from "./crudCanvas";
+import { Point, Size, Rectangle, UnitGrid } from "./canvasgrid";
 import { tile_wave } from "./tiles/wave";
 import { tile_peak } from "./tiles/peak";
 import { tile_line } from "./tiles/line";
@@ -8,8 +7,13 @@ import { choice } from "pandemonium";
 import rwc from "random-weighted-choice";
 import { Tiles, Tile } from "./defs";
 import paper from "paper";
+import { get } from "svelte/store";
+import { PatternStore } from "../stores";
 
-export function draw(config: InputConfig): void {
+export function draw() {
+  const config = get(PatternStore);
+  console.log(config);
+
   // Canvas ID
   const canvas_id = "hackanvas";
   const canvas_parent_id = "output";
@@ -33,25 +37,26 @@ export function draw(config: InputConfig): void {
     new Point(0, 0),
     new Size(config.canvas.width, config.canvas.height)
   );
-
-  // Drawing rectangle
-  const canvas_rect_p = new paper.Path.Rectangle(canvas_rect);
-  (canvas_rect_p as any).strokeColor = "red";
+  // // Drawing rectangle
+  // const canvas_rect_p = new paper.Path.Rectangle(canvas_rect);
+  // (canvas_rect_p as any).strokeColor = "teal";
 
   // Creating grid
   const grid = new UnitGrid(
     config.grid.rows,
     config.grid.columns,
     config.grid.cell_ratio,
-    { column: config.grid.cell_spacing.x, row: config.grid.cell_spacing.y }
+    {
+      column: config.grid.spacing.column * config.grid.cell_ratio,
+      row: config.grid.spacing.row,
+    }
   );
 
   // Fitting grid rectangle
   const grid_rect = canvas_rect.fitRectangleCenter(grid.ratio);
-
-  // Drawing fitted rectangle
-  const grid_rect_p = new paper.Path.Rectangle(grid_rect);
-  (grid_rect_p as any).strokeColor = "teal";
+  // // Drawing fitted rectangle
+  // const grid_rect_p = new paper.Path.Rectangle(grid_rect);
+  // (grid_rect_p as any).strokeColor = "blue";
 
   // Drawing grid
 
@@ -59,12 +64,13 @@ export function draw(config: InputConfig): void {
     grid.getCellHeightFromGridHeight(grid_rect.height),
     grid_rect.origin
   )) {
+    // Creating cell path rectangle
     const cell_rect = new paper.Rectangle(cell);
 
     // --- Tile choice --- //
 
     // Building table of choices
-    const tile_table: Array<{ weight: number; id: Tile }> = [
+    const tile_table = [
       { weight: config.tiles.line.density, id: Tiles[0] },
       { weight: config.tiles.wave.density, id: Tiles[1] },
       { weight: config.tiles.peak.density, id: Tiles[2] },
@@ -77,6 +83,7 @@ export function draw(config: InputConfig): void {
 
     // Drawing the background!
     const cell_path = new paper.Path.Rectangle(cell);
+    // (cell_path as any).strokeColor = "white";
 
     // Building table of choices
     const bg_color_table: Array<{ weight: number; id: string }> = [];
@@ -141,4 +148,12 @@ export function draw(config: InputConfig): void {
   }
 
   (paper.view as any).draw();
+}
+
+// It's super important to have some delay!
+// Some changes might not be captured because of the update speed of Svelte
+export function handleDraw() {
+  setTimeout(function () {
+    draw();
+  }, 10);
 }

@@ -11,17 +11,11 @@
 
   // Svelte
   import InputItem from "./InputItem.svelte";
-  import InputInteger from "./InputInteger.svelte";
   import ColorDropdown from "./ColorDropdown.svelte";
   import ColorInteger from "./ColorInteger.svelte";
 
   // TS / Logic
-  import { Tiles, ColorModes } from "../ts/app/defs";
-  import { Color } from "paper/dist/paper-core";
-
-  // // TS / UI
-  // import type { ColorConfig } from "../ts/ui/configs";
-  // import { tiles_text, colorModes_text } from "../ts/ui/text";
+  import { Tiles, ColorModes } from "../ts/defs";
 
   /**
    * Parameters
