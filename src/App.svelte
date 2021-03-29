@@ -34,7 +34,7 @@
         >Disegna!</button
       >
       <button class="button-main w-100 btn-svg" on:click={downloadSVG}
-        >SVG</button
+        >↓ SVG</button
       >
     </div>
 

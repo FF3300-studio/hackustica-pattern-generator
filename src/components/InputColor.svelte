@@ -81,11 +81,6 @@
 </div>
 
 <style>
-  .radio {
-    display: flex;
-    flex-flow: row nowrap;
-  }
-
   .radio__label {
     margin-bottom: calc(var(--aria) / 2);
     display: flex;
@@ -96,6 +91,10 @@
     background-color: var(--cds-ui-02);
     border-radius: var(--round-s);
     padding: 10px;
+  }
+
+  input[type="radio"] {
+    flex-shrink: 0;
   }
 
   .radio__label:hover {
