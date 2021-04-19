@@ -16,7 +16,7 @@
   import { Tiles } from "./ts/defs";
 
   import { draw, handleDraw } from "./ts/index";
-  import { downloadSVG } from "./ts/download";
+  import { downloadSVG, downloadPNG, downloadGIF } from "./ts/download";
 
   window.onload = function () {
     draw();
@@ -30,12 +30,10 @@
   <div class="input">
     <!-- Canvas -->
     <div class="btns">
-      <button class="button-main w-100 btn-draw" on:click={handleDraw}
-        >Disegna!</button
-      >
-      <button class="button-main w-100 btn-svg" on:click={downloadSVG}
-        >↓ SVG</button
-      >
+      <button class="button-main w-100" on:click={handleDraw}>Disegna!</button>
+      <button class="button-main w-100" on:click={downloadSVG}>↓ SVG</button>
+      <button class="button-main w-100" on:click={downloadPNG}>↓ PNG</button>
+      <button class="button-main w-100" on:click={downloadGIF}>↓ GIF</button>
     </div>
 
     <!-- Canvas -->
@@ -118,6 +116,21 @@
         bind:array={$PatternStore.thicknesses}
       />
     </InputGroup>
+
+    <!-- Impostazioni GIF -->
+    <InputGroup label={"Impostazioni GIF"}>
+      <!--  -->
+      <InputItem>
+        <InputInteger
+          label="Durata (s)"
+          bind:value={$PatternStore.gif.duration}
+        />
+      </InputItem>
+      <!--  -->
+      <InputItem>
+        <InputInteger label="FPS" bind:value={$PatternStore.gif.frameRate} />
+      </InputItem>
+    </InputGroup>
   </div>
 
   <!-- Debug -->
@@ -170,7 +183,11 @@
     padding: var(--aria) 0;
   }
 
-  .btn-draw {
+  .button-main {
     margin-bottom: calc(var(--aria) / 2);
+  }
+
+  .button-main:last-child {
+    margin-bottom: 0;
   }
 </style>

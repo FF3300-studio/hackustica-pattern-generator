@@ -1,6 +1,19 @@
 import paper from "paper";
+import gifshot from "gifshot";
+import { draw } from "./index";
+//
+import { get } from "svelte/store";
+import { PatternStore } from "../stores";
 
-// This sets the download
+// This function creates a download link and clicks it
+export function download(url: string, name: string): void {
+  const downloadLink = document.createElement("a");
+  downloadLink.href = url;
+  downloadLink.download = name;
+  downloadLink.click();
+}
+
+// SVG Download
 export function downloadSVG() {
   let svgData: any = paper.project.exportSVG(); // Use any when stuff is not recognized
   svgData.outerHTML; // So now we can use outerHTML even if not recognized by typescript
@@ -10,20 +23,47 @@ export function downloadSVG() {
   });
   const svgUrl = URL.createObjectURL(svgBlob);
   const name = "hackustica.svg";
-  const downloadLink = document.createElement("a");
-  downloadLink.href = svgUrl;
-  downloadLink.download = name;
-  downloadLink.click();
+  //
+  download(svgUrl, name);
 }
 
-// const button_download_png: HTMLElement = document.querySelector(
-//   ".controls__download_PNG"
-// );
-// button_download_png.onclick = function () {
-//   const imgData = canvas.toDataURL();
-//   const name = "hoffman100.png";
-//   const downloadLink = document.createElement("a");
-//   downloadLink.href = imgData;
-//   downloadLink.download = name;
-//   downloadLink.click();
-// };
+export function downloadPNG() {
+  const canvas = document.querySelector("canvas");
+  const imgData = canvas.toDataURL();
+  const name = "hackustica.png";
+  download(imgData, name);
+}
+
+export function downloadGIF() {
+  // Getting store for gif data
+  const config = get(PatternStore);
+
+  // This array will store the created images
+  const imgs: Array<string> = [];
+  // Here we create the images
+  for (let i = 0; i < config.gif.duration * config.gif.frameRate; i++) {
+    // Drawing a frame
+    draw();
+    // Getting reference to canvas
+    const canvas = document.querySelector("canvas");
+    // Saving image
+    const imgData = canvas.toDataURL();
+    imgs.push(imgData);
+  }
+
+  // And here we create the gif
+  gifshot.createGIF(
+    {
+      images: imgs,
+      frameDuration: 1 / config.gif.frameRate,
+      gifWidth: document.querySelector("canvas").width,
+      gifHeight: document.querySelector("canvas").height,
+    },
+    function (obj) {
+      if (!obj.error) {
+        var image = obj.image;
+        download(image, "hackustica.gif");
+      }
+    }
+  );
+}
