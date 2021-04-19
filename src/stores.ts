@@ -68,9 +68,9 @@ export const DefaultColorsStore = writable([
 
 export const TextStore = writable({
   tiles: {
-    line: "Linea",
-    wave: "Onda",
-    peak: "Picco",
+    line: "Forma",
+    wave: "Materia",
+    peak: "Suono",
   },
   color_modes: {
     tile: "Un colore per forma",

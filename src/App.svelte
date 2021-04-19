@@ -153,7 +153,7 @@
 
   .input {
     flex-shrink: 0;
-    flex-basis: 300px;
+    flex-basis: 350px;
     background-color: var(--cds-ui-background);
     overflow: auto;
     padding: 0 var(--aria);

@@ -62,11 +62,18 @@
 </div>
 
 <style>
+  .container {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+  }
+
   .options {
     background-color: var(--cds-ui-03);
     padding: calc(var(--aria) / 2);
+    padding-bottom: 0;
     display: flex;
-    flex-flow: row nowrap;
+    flex-flow: row wrap;
     border-radius: 0 0 var(--round-s) var(--round-s);
   }
 
@@ -88,6 +95,7 @@
     width: var(--input-h);
     margin-right: calc(var(--aria) / 2);
     border: 1px solid var(--cds-ui-01);
+    margin-bottom: calc(var(--aria) / 2);
   }
 
   .color-current {
@@ -107,7 +115,7 @@
   }
 
   .buttons {
-    flex-grow: 1;
+    flex-basis: 60%;
     max-width: 180px;
     margin-left: var(--aria);
   }
