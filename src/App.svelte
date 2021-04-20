@@ -31,9 +31,17 @@
     <!-- Canvas -->
     <div class="btns">
       <button class="button-main w-100" on:click={handleDraw}>Disegna!</button>
-      <button class="button-main w-100" on:click={downloadSVG}>↓ SVG</button>
-      <button class="button-main w-100" on:click={downloadPNG}>↓ PNG</button>
-      <button class="button-main w-100" on:click={downloadGIF}>↓ GIF</button>
+      <div class="buttons-download">
+        <button class="button-main btn-flex" on:click={downloadSVG}
+          >↓ SVG</button
+        >
+        <button class="button-main btn-flex" on:click={downloadPNG}
+          >↓ PNG</button
+        >
+        <button class="button-main btn-flex" on:click={downloadGIF}
+          >↓ GIF</button
+        >
+      </div>
     </div>
 
     <!-- Canvas -->
@@ -189,5 +197,15 @@
 
   .button-main:last-child {
     margin-bottom: 0;
+  }
+
+  .buttons-download {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+  }
+
+  .btn-flex {
+    flex-basis: 32%;
   }
 </style>
