@@ -69,6 +69,15 @@
   padding: 5px 10px;
 }
 
+.input__checkbox {
+  width: var(--input-h);
+  height: var(--input-h);
+  background-color: var(--cds-ui-02);
+  border: none;
+  border-radius: var(--round-s);
+  padding: 5px 10px;
+}
+
 .input__number:hover {
   background-color: var(--cds-ui-03);
 }
