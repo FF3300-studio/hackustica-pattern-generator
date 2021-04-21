@@ -12,11 +12,24 @@
 export const Tiles = ["line", "wave", "peak"] as const;
 export type Tile = typeof Tiles[number];
 
-export const ColorModes = ["tile", "distribution"] as const;
+export const ColorModes = ["tile", "distribution", "gradient"] as const;
 export type ColorMode = typeof ColorModes[number];
 
 export const ThicknessModes = ["image", "values"] as const;
 export type ThicknessMode = typeof ThicknessModes[number];
+
+export const GradientPositions = [
+  "topLeft",
+  "topRight",
+  "bottomLeft",
+  "bottomRight",
+  "leftCenter",
+  "topCenter",
+  "rightCenter",
+  "bottomCenter",
+  "center",
+] as const;
+export type GradientPosition = typeof GradientPositions[number];
 
 /**
  * Configs
@@ -59,6 +72,7 @@ export interface ColorConfig {
   mode: ColorMode;
   tile: Record<Tile, string>;
   distribution: Record<string, number>;
+  gradient?: GradientConfig;
 }
 
 export interface ThicknessConfig {
@@ -80,4 +94,14 @@ export interface GIFConfig {
 export interface WeightConfig {
   weight: number;
   id: string;
+}
+
+export interface GradientPointConfig {
+  color: string;
+  position: GradientPosition;
+}
+
+export interface GradientConfig {
+  first: GradientPointConfig;
+  second: GradientPointConfig;
 }

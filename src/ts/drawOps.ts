@@ -10,6 +10,7 @@ import {
   ColorConfig,
   WeightConfig,
   ThicknessConfig,
+  GradientConfig,
 } from "./defs";
 
 // Tiles
@@ -209,6 +210,10 @@ export function getColors(
   else if (colorConfig.mode == "tile") {
     return getColorsTileMode(colorConfig, tiles);
   }
+  //
+  else if (colorConfig.mode == "gradient") {
+    return undefined;
+  }
 }
 
 /**
@@ -395,4 +400,36 @@ export function mapValues(
   return list.map((value) =>
     mapValue(value, old_min, old_max, new_min, new_max)
   );
+}
+
+/**
+ * Gradient
+ */
+
+export function getGradient(
+  gradientConfig: GradientConfig,
+  rect: paper.Path
+): any {
+  return {
+    gradient: {
+      stops: [
+        new paper.GradientStop(new paper.Color(gradientConfig.first.color), 0),
+        new paper.GradientStop(new paper.Color(gradientConfig.second.color), 1),
+      ],
+      radial: true,
+    },
+    origin: rect.bounds[gradientConfig.first.position],
+    destination: rect.bounds[gradientConfig.second.position],
+  };
+}
+
+export function drawGradient(gradientConfig: GradientConfig, grid: Grid): void {
+  // Creating rectangle
+  const bg = new paper.Rectangle(
+    new paper.Point(grid.origin),
+    new paper.Size(grid.size)
+  );
+  // Coloring it
+  const bg_path = new paper.Path.Rectangle(bg);
+  (bg_path as any).fillColor = getGradient(gradientConfig, bg_path);
 }

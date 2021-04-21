@@ -11,13 +11,10 @@
   import InputBool from "./components/InputBool.svelte";
   import InputFloat from "./components/InputFloat.svelte";
   import InputColor from "./components/InputColor.svelte";
-  import InputCRUD from "./components/InputCRUD.svelte";
-  import InputRadio from "./components/InputRadio.svelte";
-  import InputFile from "./components/InputFile.svelte";
-  import InputSeparator from "./components/InputSeparator.svelte";
+  import InputThickness from "./components/InputThickness.svelte";
 
   // TS / Logic imports
-  import { Tiles, ThicknessModes } from "./ts/defs";
+  import { Tiles } from "./ts/defs";
 
   import { draw, handleDraw } from "./ts/draw";
   import { downloadSVG, downloadPNG, downloadGIF } from "./ts/download";
@@ -128,60 +125,12 @@
 
       <!-- Colore sfondo -->
       <InputGroup label={"Colore sfondo"}>
-        <InputColor on:update={handleDraw} scope="background" />
+        <InputColor on:update={handleDraw} gradient={true} scope="background" />
       </InputGroup>
 
       <!-- Thicknesses -->
       <InputGroup label={"Spessori"}>
-        <!-- Radio buttons to select the thickness mode -->
-        <InputItem>
-          <InputRadio
-            on:update={handleDraw}
-            bind:value={$PatternStore.thickness.mode}
-            items={[...ThicknessModes].reverse()}
-            labels={$TextStore.thickness_modes}
-          />
-        </InputItem>
-        <!--  -->
-        <InputSeparator />
-        <!--  -->
-        {#if $PatternStore.thickness.mode == "image"}
-          <InputItem>
-            <InputFile
-              on:upload={(e) => {
-                $PatternStore.thickness.image.url = e.detail.file;
-              }}
-            />
-          </InputItem>
-          <!--  -->
-          <InputItem>
-            <InputInteger
-              label="Numero di step"
-              bind:value={$PatternStore.thickness.image.steps}
-            />
-          </InputItem>
-          <!--  -->
-          <InputItem>
-            <InputFloat
-              label="Spessore minimo"
-              bind:value={$PatternStore.thickness.image.min}
-            />
-          </InputItem>
-          <!--  -->
-          <InputItem>
-            <InputFloat
-              label="Spessore massimo"
-              bind:value={$PatternStore.thickness.image.max}
-            />
-          </InputItem>
-        {:else}
-          <InputItem>
-            <InputCRUD
-              on:update={handleDraw}
-              bind:array={$PatternStore.thickness.values}
-            />
-          </InputItem>
-        {/if}
+        <InputThickness />
       </InputGroup>
 
       <!-- Impostazioni GIF -->
@@ -251,6 +200,7 @@
     top: 0;
     background-color: var(--cds-ui-background);
     padding: var(--aria) 0;
+    z-index: 1000;
   }
 
   .button-main {

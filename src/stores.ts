@@ -57,6 +57,16 @@ export const PatternStore: Writable<Config> = writable({
         "#ffffff": 1,
         "#000000": 0,
       },
+      gradient: {
+        first: {
+          color: "#66ff99",
+          position: "topLeft",
+        },
+        second: {
+          color: "#3366ff",
+          position: "bottomRight",
+        },
+      },
     },
   },
   //
@@ -94,9 +104,21 @@ export const TextStore = writable({
   color_modes: {
     tile: "Un colore per forma",
     distribution: "Distribuzione di colore indipendente dalla forma",
+    gradient: "Sfumatura",
   },
   thickness_modes: {
     image: "Immagine (ASCII)",
     values: "Valori",
+  },
+  gradient_positions: {
+    topLeft: "⬉",
+    topRight: "⬈",
+    bottomLeft: "⬋",
+    bottomRight: "⬊",
+    leftCenter: "←",
+    topCenter: "↑",
+    rightCenter: "→",
+    bottomCenter: "↓",
+    center: "•",
   },
 });

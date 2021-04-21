@@ -10,6 +10,7 @@ import {
   getColors,
   drawTile,
   getThickness,
+  drawGradient,
 } from "./drawOps";
 
 export async function draw() {
@@ -34,17 +35,24 @@ export async function draw() {
   const colors_tile = getColors(config.color.tiles, tiles);
   const thicknesses = await getThickness(config, grid);
 
+  // Doing gradient if asked
+  if (colors_background == undefined) {
+    drawGradient(config.color.background.gradient, grid);
+  }
+
   // Drawing pattern
   for (let i = 0; i < tiles.length; i++) {
     const tile = tiles[i];
     const cell = cells[i];
     const cell_rect = new paper.Rectangle(cell);
-    const color_background = colors_background[i];
     const color_tile = colors_tile[i];
 
     // Background
-    let bg_path = new paper.Path.Rectangle(cell_rect);
-    (bg_path as any).fillColor = color_background;
+    if (colors_background != undefined) {
+      const color_background = colors_background[i];
+      let bg_path = new paper.Path.Rectangle(cell_rect);
+      (bg_path as any).fillColor = color_background;
+    }
 
     // Drawing tile accordingly
     let tile_path = drawTile(tile, cell_rect, config);

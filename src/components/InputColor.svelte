@@ -14,9 +14,10 @@
   import InputRadio from "./InputRadio.svelte";
   import ColorDropdown from "./ColorDropdown.svelte";
   import ColorInteger from "./ColorInteger.svelte";
+  import InputSelect from "./InputSelect.svelte";
 
   // TS / Logic
-  import { Tiles, ColorModes } from "../ts/defs";
+  import { Tiles, ColorModes, GradientPositions } from "../ts/defs";
   import InputSeparator from "./InputSeparator.svelte";
 
   /**
@@ -24,6 +25,7 @@
    */
 
   export let scope: string;
+  export let gradient: boolean = false;
 
   /**
    * Logic
@@ -33,6 +35,21 @@
   const dispatch = createEventDispatcher();
   function dispatchUpdate() {
     dispatch("update");
+  }
+
+  // Removing gradient if asked
+  const modes = [...ColorModes];
+  if (!gradient) {
+    modes.splice(modes.indexOf("gradient"), 1);
+  }
+
+  // Creating array for select
+  const gradientpos: Array<{ value: string | number; text: string }> = [];
+  for (let gp of GradientPositions) {
+    gradientpos.push({
+      value: gp,
+      text: $TextStore.gradient_positions[gp],
+    });
   }
 
   // IDs for select
@@ -48,7 +65,7 @@
   <InputRadio
     on:update={dispatchUpdate}
     bind:value={$PatternStore.color[scope].mode}
-    items={[...ColorModes]}
+    items={modes}
     labels={$TextStore.color_modes}
   />
 </InputItem>
@@ -76,6 +93,36 @@
         />
       </InputItem>
     {/each}
+  {:else if $PatternStore.color[scope].mode == "gradient"}
+    <ColorDropdown
+      label="Colore 1"
+      bind:color={$PatternStore.color[scope].gradient.first.color}
+      on:update={dispatchUpdate}
+    />
+    <!--  -->
+    <InputItem>
+      <InputSelect
+        values={gradientpos}
+        bind:value={$PatternStore.color.background.gradient.first.position}
+        on:update={dispatchUpdate}
+        label="Posizione"
+      />
+    </InputItem>
+    <!--  -->
+    <ColorDropdown
+      label="Colore 2"
+      bind:color={$PatternStore.color[scope].gradient.second.color}
+      on:update={dispatchUpdate}
+    />
+    <!--  -->
+    <InputItem>
+      <InputSelect
+        values={gradientpos}
+        bind:value={$PatternStore.color.background.gradient.second.position}
+        on:update={dispatchUpdate}
+        label="Posizione"
+      />
+    </InputItem>
   {/if}
 </div>
 

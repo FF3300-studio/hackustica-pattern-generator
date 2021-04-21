@@ -106,8 +106,8 @@
 
   .container {
     display: flex;
-    flex-direction: row nowrap;
-    margin-bottom: var(--aria);
+    flex-flow: row nowrap;
+    margin-bottom: calc(var(--aria) / 2);
   }
 
   .container:last-child {
