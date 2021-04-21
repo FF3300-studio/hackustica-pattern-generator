@@ -1,10 +1,13 @@
-import { writable } from "svelte/store";
+import { writable, Writable } from "svelte/store";
+import type { Config } from "./ts/defs";
 
-export const PatternStore = writable({
+export const PatternStore: Writable<Config> = writable({
+  //
   canvas: {
     width: 600,
     height: 450,
   },
+  //
   grid: {
     rows: 10,
     columns: 10,
@@ -13,13 +16,17 @@ export const PatternStore = writable({
       row: 0,
       column: 0,
     },
+    fill: false,
   },
+  //
   tiles: {
     line: { density: 1 },
-    wave: { density: 1, squaring: 0.5, direction: "random" },
-    peak: { density: 1, squaring: 0.65, direction: "random" },
+    wave: { density: 1, squaring: 0.5 },
+    peak: { density: 1, squaring: 0.65 },
   },
+  //
   color: {
+    //
     tiles: {
       mode: "tile",
       tile: {
@@ -35,6 +42,7 @@ export const PatternStore = writable({
         "#000000": 0,
       },
     },
+    //
     background: {
       mode: "distribution",
       tile: {
@@ -51,7 +59,18 @@ export const PatternStore = writable({
       },
     },
   },
-  thicknesses: [0.1, 0.15, 0.2, 0.25, 0.3, 0.35],
+  //
+  thickness: {
+    mode: "values",
+    values: [0.1, 0.15, 0.2, 0.25, 0.3, 0.35],
+    image: {
+      url: undefined,
+      steps: 3,
+      min: 0.1,
+      max: 0.4,
+    },
+  },
+  //
   gif: {
     duration: 4,
     frameRate: 1,
@@ -75,5 +94,9 @@ export const TextStore = writable({
   color_modes: {
     tile: "Un colore per forma",
     distribution: "Distribuzione di colore indipendente dalla forma",
+  },
+  thickness_modes: {
+    image: "Immagine (ASCII)",
+    values: "Valori",
   },
 });

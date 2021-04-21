@@ -8,14 +8,18 @@
   import InputGroup from "./components/InputGroup.svelte";
   import InputItem from "./components/InputItem.svelte";
   import InputInteger from "./components/InputInteger.svelte";
+  import InputBool from "./components/InputBool.svelte";
   import InputFloat from "./components/InputFloat.svelte";
   import InputColor from "./components/InputColor.svelte";
   import InputCRUD from "./components/InputCRUD.svelte";
+  import InputRadio from "./components/InputRadio.svelte";
+  import InputFile from "./components/InputFile.svelte";
+  import InputSeparator from "./components/InputSeparator.svelte";
 
   // TS / Logic imports
-  import { Tiles } from "./ts/defs";
+  import { Tiles, ThicknessModes } from "./ts/defs";
 
-  import { draw, handleDraw } from "./ts/index";
+  import { draw, handleDraw } from "./ts/draw";
   import { downloadSVG, downloadPNG, downloadGIF } from "./ts/download";
 
   window.onload = function () {
@@ -28,121 +32,178 @@
 
   <!-- Input -->
   <div class="input">
-    <!-- Canvas -->
-    <div class="btns">
-      <button class="button-main w-100" on:click={handleDraw}>Disegna!</button>
-      <div class="buttons-download">
-        <button class="button-main btn-flex" on:click={downloadSVG}
-          >↓ SVG</button
+    <div>
+      <!-- Canvas -->
+      <div class="btns">
+        <button class="button-main w-100" on:click={handleDraw}>Disegna!</button
         >
-        <button class="button-main btn-flex" on:click={downloadPNG}
-          >↓ PNG</button
-        >
-        <button class="button-main btn-flex" on:click={downloadGIF}
-          >↓ GIF</button
-        >
+        <div class="buttons-download">
+          <button class="button-main btn-flex" on:click={downloadSVG}
+            >↓ SVG</button
+          >
+          <button class="button-main btn-flex" on:click={downloadPNG}
+            >↓ PNG</button
+          >
+          <button class="button-main btn-flex" on:click={downloadGIF}
+            >↓ GIF</button
+          >
+        </div>
       </div>
-    </div>
 
-    <!-- Canvas -->
-    <InputGroup label={"Tavola disegno"}>
-      <!--  -->
-      <InputItem>
-        <InputInteger
-          label="Larghezza"
-          on:update={handleDraw}
-          bind:value={$PatternStore.canvas.width}
-        />
-      </InputItem>
-      <!--  -->
-      <InputItem>
-        <InputInteger
-          label="Altezza"
-          on:update={handleDraw}
-          bind:value={$PatternStore.canvas.height}
-        />
-      </InputItem>
-      <!--  -->
-    </InputGroup>
-
-    <!-- Grid -->
-    <InputGroup label={"Griglia"}>
-      <!--  -->
-      <InputItem>
-        <InputInteger
-          label="Righe"
-          on:update={handleDraw}
-          bind:value={$PatternStore.grid.rows}
-        />
-      </InputItem>
-      <!--  -->
-      <InputItem>
-        <InputInteger
-          label="Colonne"
-          on:update={handleDraw}
-          bind:value={$PatternStore.grid.columns}
-        />
-      </InputItem>
-      <!--  -->
-      <InputItem>
-        <InputFloat
-          label="Distanza tra le colonne"
-          on:update={handleDraw}
-          bind:value={$PatternStore.grid.spacing.column}
-        />
-      </InputItem>
-      <!--  -->
-    </InputGroup>
-
-    <!-- Densità -->
-    <InputGroup label={"Densità forme"}>
-      {#each Tiles as t}
+      <!-- Canvas -->
+      <InputGroup label={"Tavola disegno"}>
+        <!--  -->
         <InputItem>
           <InputInteger
-            label={$TextStore.tiles[t]}
+            label="Larghezza"
             on:update={handleDraw}
-            bind:value={$PatternStore.tiles[t].density}
+            bind:value={$PatternStore.canvas.width}
           />
         </InputItem>
-      {/each}
-    </InputGroup>
+        <!--  -->
+        <InputItem>
+          <InputInteger
+            label="Altezza"
+            on:update={handleDraw}
+            bind:value={$PatternStore.canvas.height}
+          />
+        </InputItem>
+        <!--  -->
+      </InputGroup>
 
-    <!-- Colore tiles -->
-    <InputGroup label={"Colore forme"}>
-      <InputColor on:update={handleDraw} scope="tiles" />
-    </InputGroup>
+      <!-- Grid -->
+      <InputGroup label={"Griglia"}>
+        <!--  -->
+        <InputItem>
+          <InputInteger
+            label="Righe"
+            on:update={handleDraw}
+            bind:value={$PatternStore.grid.rows}
+          />
+        </InputItem>
+        <!--  -->
+        <InputItem>
+          <InputInteger
+            label="Colonne"
+            on:update={handleDraw}
+            bind:value={$PatternStore.grid.columns}
+          />
+        </InputItem>
+        <!--  -->
+        <InputItem>
+          <InputFloat
+            label="Distanza tra le colonne"
+            on:update={handleDraw}
+            bind:value={$PatternStore.grid.spacing.column}
+          />
+        </InputItem>
+        <!--  -->
+        <InputItem>
+          <InputBool
+            label="Riempimento"
+            on:update={handleDraw}
+            bind:value={$PatternStore.grid.fill}
+          />
+        </InputItem>
+        <!--  -->
+      </InputGroup>
 
-    <!-- Colore sfondo -->
-    <InputGroup label={"Colore sfondo"}>
-      <InputColor on:update={handleDraw} scope="background" />
-    </InputGroup>
+      <!-- Densità -->
+      <InputGroup label={"Densità forme"}>
+        {#each Tiles as t}
+          <InputItem>
+            <InputInteger
+              label={$TextStore.tiles[t]}
+              on:update={handleDraw}
+              bind:value={$PatternStore.tiles[t].density}
+            />
+          </InputItem>
+        {/each}
+      </InputGroup>
 
-    <!-- Thicknesses -->
-    <InputGroup label={"Spessori"}>
-      <InputCRUD
-        on:update={handleDraw}
-        bind:array={$PatternStore.thicknesses}
-      />
-    </InputGroup>
+      <!-- Colore tiles -->
+      <InputGroup label={"Colore forme"}>
+        <InputColor on:update={handleDraw} scope="tiles" />
+      </InputGroup>
 
-    <!-- Impostazioni GIF -->
-    <InputGroup label={"Impostazioni GIF"}>
-      <!--  -->
-      <InputItem>
-        <InputInteger
-          label="Durata (s)"
-          bind:value={$PatternStore.gif.duration}
-        />
-      </InputItem>
-      <!--  -->
-      <InputItem>
-        <InputInteger label="FPS" bind:value={$PatternStore.gif.frameRate} />
-      </InputItem>
-    </InputGroup>
+      <!-- Colore sfondo -->
+      <InputGroup label={"Colore sfondo"}>
+        <InputColor on:update={handleDraw} scope="background" />
+      </InputGroup>
+
+      <!-- Thicknesses -->
+      <InputGroup label={"Spessori"}>
+        <!-- Radio buttons to select the thickness mode -->
+        <InputItem>
+          <InputRadio
+            on:update={handleDraw}
+            bind:value={$PatternStore.thickness.mode}
+            items={[...ThicknessModes].reverse()}
+            labels={$TextStore.thickness_modes}
+          />
+        </InputItem>
+        <!--  -->
+        <InputSeparator />
+        <!--  -->
+        {#if $PatternStore.thickness.mode == "image"}
+          <InputItem>
+            <InputFile
+              on:upload={(e) => {
+                $PatternStore.thickness.image.url = e.detail.file;
+              }}
+            />
+          </InputItem>
+          <!--  -->
+          <InputItem>
+            <InputInteger
+              label="Numero di step"
+              bind:value={$PatternStore.thickness.image.steps}
+            />
+          </InputItem>
+          <!--  -->
+          <InputItem>
+            <InputFloat
+              label="Spessore minimo"
+              bind:value={$PatternStore.thickness.image.min}
+            />
+          </InputItem>
+          <!--  -->
+          <InputItem>
+            <InputFloat
+              label="Spessore massimo"
+              bind:value={$PatternStore.thickness.image.max}
+            />
+          </InputItem>
+        {:else}
+          <InputItem>
+            <InputCRUD
+              on:update={handleDraw}
+              bind:array={$PatternStore.thickness.values}
+            />
+          </InputItem>
+        {/if}
+      </InputGroup>
+
+      <!-- Impostazioni GIF -->
+      <InputGroup label={"Impostazioni GIF"}>
+        <!--  -->
+        <InputItem>
+          <InputInteger
+            label="Durata (s)"
+            bind:value={$PatternStore.gif.duration}
+          />
+        </InputItem>
+        <!--  -->
+        <InputItem>
+          <InputInteger label="FPS" bind:value={$PatternStore.gif.frameRate} />
+        </InputItem>
+      </InputGroup>
+    </div>
   </div>
 
   <!-- Debug -->
-  <!-- <pre style="overflow:auto">
+  <!-- <pre
+    style="overflow:auto">
       {JSON.stringify($PatternStore, null, 4)}
     </pre> -->
 
@@ -161,7 +222,7 @@
 
   .input {
     flex-shrink: 0;
-    flex-basis: 350px;
+    width: 350px;
     background-color: var(--cds-ui-background);
     overflow: auto;
     padding: 0 var(--aria);
@@ -185,6 +246,7 @@
   }
 
   .btns {
+    position: -webkit-sticky;
     position: sticky;
     top: 0;
     background-color: var(--cds-ui-background);

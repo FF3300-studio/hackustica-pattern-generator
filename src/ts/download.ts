@@ -1,6 +1,6 @@
 import paper from "paper";
 import gifshot from "gifshot";
-import { draw } from "./index";
+import { draw } from "./draw";
 //
 import { get } from "svelte/store";
 import { PatternStore } from "../stores";
