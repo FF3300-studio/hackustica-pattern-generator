@@ -33,6 +33,7 @@
     <InputFile
       on:upload={(e) => {
         $PatternStore.thickness.image.url = e.detail.file;
+        handleDraw();
       }}
     />
   </InputItem>
@@ -41,6 +42,7 @@
     <InputInteger
       label="Numero di step"
       bind:value={$PatternStore.thickness.image.steps}
+      on:update={handleDraw}
     />
   </InputItem>
   <!--  -->
@@ -48,6 +50,7 @@
     <InputFloat
       label="Spessore minimo"
       bind:value={$PatternStore.thickness.image.min}
+      on:update={handleDraw}
     />
   </InputItem>
   <!--  -->
@@ -55,6 +58,7 @@
     <InputFloat
       label="Spessore massimo"
       bind:value={$PatternStore.thickness.image.max}
+      on:update={handleDraw}
     />
   </InputItem>
 {:else}
