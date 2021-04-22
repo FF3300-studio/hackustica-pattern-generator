@@ -34,7 +34,7 @@ export function downloadPNG() {
   download(imgData, name);
 }
 
-export function downloadGIF() {
+export async function downloadGIF() {
   // Getting store for gif data
   const config = get(PatternStore);
 
@@ -43,7 +43,7 @@ export function downloadGIF() {
   // Here we create the images
   for (let i = 0; i < config.gif.duration * config.gif.frameRate; i++) {
     // Drawing a frame
-    draw();
+    await draw();
     // Getting reference to canvas
     const canvas = document.querySelector("canvas");
     // Saving image
