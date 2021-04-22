@@ -220,10 +220,10 @@ export function getColors(
  * Thickness
  */
 
-export function getThicknessValuesMode(
+export async function getThicknessValuesMode(
   thicknessConfig: ThicknessConfig,
   count: number
-): Array<number> {
+): Promise<Array<number>> {
   const thicknesses: Array<number> = [];
 
   for (let i = 0; i < count; i++) {
@@ -238,11 +238,9 @@ export async function getThicknessImageMode(
   grid: Grid
 ): Promise<Array<number>> {
   // Creating image
-  const img = makeImage(config.thickness.image.url);
-  // Adding it to document
-  document.body.appendChild(img);
+  const img = await makeImage(config.thickness.image.url);
   // Placing it in paperjs
-  const img_raster = await placeImagePromise(img, grid.rectangle);
+  const img_raster = await placeImage(img, grid.rectangle);
   // Rasterizing it
   const colors = rasterizeByGrid(img_raster, grid);
   // Converting to 0-1
@@ -278,11 +276,14 @@ export async function getThickness(
     config.thickness.mode == "image" &&
     config.thickness.image.url != undefined
   ) {
-    return getThicknessImageMode(config, grid);
+    return await getThicknessImageMode(config, grid);
   }
   //
   else {
-    return getThicknessValuesMode(config.thickness, grid.rows * grid.columns);
+    return await getThicknessValuesMode(
+      config.thickness,
+      grid.rows * grid.columns
+    );
   }
 }
 
@@ -290,30 +291,17 @@ export async function getThickness(
  * Image ops
  */
 
-export function makeImage(data: string): HTMLImageElement {
-  const img = document.createElement("img");
-  img.src = data;
-  img.id = nanoid(5);
-  img.style.display = "none";
-  return img;
+export async function makeImage(data: string): Promise<HTMLImageElement> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.src = data;
+    img.id = nanoid(5);
+    img.style.display = "none";
+    img.onload = () => resolve(img);
+  });
 }
 
-export function placeImage(
-  img: HTMLImageElement,
-  rect: Rectangle
-): paper.Raster {
-  // Creating image
-  const image = new paper.Raster(img);
-  // Fitting image to rectangle
-  const image_ratio = image.width / image.height;
-  const image_rect = rect.fillRectangleCenter(image_ratio);
-  // Setting boundaries and origin
-  image.size = new paper.Size(image_rect);
-  image.position = new paper.Point(rect.center);
-  return image;
-}
-
-export function placeImagePromise(
+export async function placeImage(
   img: HTMLImageElement,
   rect: Rectangle
 ): Promise<paper.Raster> {
@@ -324,6 +312,7 @@ export function placeImagePromise(
     const image_ratio = image.width / image.height;
     const image_rect = rect.fillRectangleCenter(image_ratio);
     // Setting boundaries and origin
+    image.visible = false;
     image.size = new paper.Size(image_rect);
     image.position = new paper.Point(rect.center);
     image.onLoad = () => resolve(image);
@@ -360,7 +349,7 @@ export function quantizeValues(
   bins: number,
   min: number,
   max: number
-) {
+): Array<number> {
   const step = (max - min) / bins;
   //
   const bounds = [];
