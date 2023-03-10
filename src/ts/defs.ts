@@ -76,14 +76,7 @@ export interface ColorConfig {
 }
 
 export interface ThicknessConfig {
-  mode: ThicknessMode;
-  values: Array<number>;
-  image: {
-    url: string;
-    steps: number;
-    min: number;
-    max: number;
-  };
+  imageUrl: string | undefined;
 }
 
 export interface GIFConfig {

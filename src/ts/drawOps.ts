@@ -220,51 +220,23 @@ export function getColors(
  * Thickness
  */
 
-export async function getThicknessValuesMode(
-  thicknessConfig: ThicknessConfig,
-  count: number
-): Promise<Array<number>> {
-  const thicknesses: Array<number> = [];
-
-  for (let i = 0; i < count; i++) {
-    thicknesses.push(choice(thicknessConfig.values));
-  }
-
-  return thicknesses;
-}
-
 export async function getThicknessImageMode(
   config: Config,
   grid: Grid
 ): Promise<Array<number>> {
   // Creating image
-  const img = await makeImage(config.thickness.image.url);
+  const img = await makeImage(config.thickness.imageUrl);
   // Placing it in paperjs
   const img_raster = await placeImage(img, grid.rectangle);
   // Rasterizing it
   const colors = rasterizeByGrid(img_raster, grid);
   // Converting to 0-1
   const values = colorsToValues(colors);
-  // Mapping them to min-max
-  const values_map = mapValues(
-    values,
-    0,
-    1,
-    config.thickness.image.min,
-    config.thickness.image.max
-  );
-  // Quantizing them
-  const values_quant = quantizeValues(
-    values_map,
-    config.thickness.image.steps,
-    config.thickness.image.min,
-    config.thickness.image.max
-  );
   // Cleaning up
   img.remove();
   img_raster.remove();
   //
-  return values_quant;
+  return values;
 }
 
 export async function getThickness(
@@ -272,18 +244,10 @@ export async function getThickness(
   grid: Grid
 ): Promise<Array<number>> {
   //
-  if (
-    config.thickness.mode == "image" &&
-    config.thickness.image.url != undefined
-  ) {
+  if (config.thickness.imageUrl != undefined) {
     return await getThicknessImageMode(config, grid);
-  }
-  //
-  else {
-    return await getThicknessValuesMode(
-      config.thickness,
-      grid.rows * grid.columns
-    );
+  } else {
+    throw new Error("Image not loaded!");
   }
 }
 

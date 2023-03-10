@@ -9,9 +9,9 @@ export const PatternStore: Writable<Config> = writable({
   },
   //
   grid: {
-    rows: 10,
-    columns: 10,
-    cell_ratio: 0.75,
+    rows: 50,
+    columns: 50,
+    cell_ratio: 1,
     spacing: {
       row: 0,
       column: 0,
@@ -71,14 +71,7 @@ export const PatternStore: Writable<Config> = writable({
   },
   //
   thickness: {
-    mode: "values",
-    values: [0.1, 0.15, 0.2, 0.25, 0.3, 0.35],
-    image: {
-      url: undefined,
-      steps: 3,
-      min: 0.1,
-      max: 0.4,
-    },
+    imageUrl: undefined,
   },
   //
   gif: {
