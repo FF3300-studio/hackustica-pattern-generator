@@ -8,9 +8,10 @@
   import InputGroup from "./components/InputGroup.svelte";
   import InputItem from "./components/InputItem.svelte";
   import InputInteger from "./components/InputInteger.svelte";
+  import InputAlphabet from "./components/InputAlphabet.svelte";
 
   import { draw } from "./ts/draw";
-  import { downloadSVG, downloadPNG, downloadGIF } from "./ts/download";
+  import { downloadSVG, downloadPNG } from "./ts/download";
   import InputFile from "./components/InputFile.svelte";
 </script>
 
@@ -75,6 +76,12 @@
               $PatternStore.thickness.imageUrl = e.detail.file;
             }}
           />
+        </InputItem>
+      </InputGroup>
+      <!-- Thicknesses -->
+      <InputGroup label={"Immagine"}>
+        <InputItem>
+          <InputAlphabet bind:alfabeti={$PatternStore.alphabets} />
         </InputItem>
       </InputGroup>
     </div>

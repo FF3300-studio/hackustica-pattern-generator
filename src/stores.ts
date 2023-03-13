@@ -19,74 +19,12 @@ export const PatternStore: Writable<Config> = writable({
     fill: false,
   },
   //
-  tiles: {
-    line: { density: 1 },
-    wave: { density: 1, squaring: 0.5 },
-    peak: { density: 1, squaring: 0.65 },
-  },
-  //
-  color: {
-    //
-    tiles: {
-      mode: "tile",
-      tile: {
-        line: "#3366ff",
-        wave: "#66ff99",
-        peak: "#ff6666",
-      },
-      distribution: {
-        "#3366ff": 1,
-        "#66ff99": 1,
-        "#ff6666": 1,
-        "#ffffff": 0,
-        "#000000": 0,
-      },
-    },
-    //
-    background: {
-      mode: "distribution",
-      tile: {
-        line: "#3366ff",
-        wave: "#66ff99",
-        peak: "#ff6666",
-      },
-      distribution: {
-        "#3366ff": 0,
-        "#66ff99": 0,
-        "#ff6666": 0,
-        "#ffffff": 1,
-        "#000000": 0,
-      },
-      gradient: {
-        first: {
-          color: "#66ff99",
-          position: "topLeft",
-        },
-        second: {
-          color: "#3366ff",
-          position: "bottomRight",
-        },
-      },
-    },
-  },
-  //
   thickness: {
     imageUrl: undefined,
   },
   //
-  gif: {
-    duration: 4,
-    frameRate: 1,
-  },
+  alphabets: [],
 });
-
-export const DefaultColorsStore = writable([
-  "#3366ff",
-  "#66ff99",
-  "#ff6666",
-  "#ffffff",
-  "#000000",
-]);
 
 export const TextStore = writable({
   tiles: {

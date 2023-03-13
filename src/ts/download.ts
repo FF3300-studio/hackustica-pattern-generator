@@ -33,37 +33,3 @@ export function downloadPNG() {
   const name = "hackustica.png";
   download(imgData, name);
 }
-
-export async function downloadGIF() {
-  // Getting store for gif data
-  const config = get(PatternStore);
-
-  // This array will store the created images
-  const imgs: Array<string> = [];
-  // Here we create the images
-  for (let i = 0; i < config.gif.duration * config.gif.frameRate; i++) {
-    // Drawing a frame
-    await draw();
-    // Getting reference to canvas
-    const canvas = document.querySelector("canvas");
-    // Saving image
-    const imgData = canvas.toDataURL();
-    imgs.push(imgData);
-  }
-
-  // And here we create the gif
-  gifshot.createGIF(
-    {
-      images: imgs,
-      frameDuration: 1 / config.gif.frameRate,
-      gifWidth: document.querySelector("canvas").width,
-      gifHeight: document.querySelector("canvas").height,
-    },
-    function (obj) {
-      if (!obj.error) {
-        var image = obj.image;
-        download(image, "hackustica.gif");
-      }
-    }
-  );
-}

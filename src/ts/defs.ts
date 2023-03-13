@@ -38,13 +38,8 @@ export type GradientPosition = typeof GradientPositions[number];
 export interface Config {
   canvas: CanvasConfig;
   grid: GridConfig;
-  tiles: Record<Tile, TileConfig>;
-  color: {
-    tiles: ColorConfig;
-    background: ColorConfig;
-  };
   thickness: ThicknessConfig;
-  gif: GIFConfig;
+  alphabets: Array<string>;
 }
 
 export interface CanvasConfig {

@@ -7,7 +7,7 @@
   import { PatternStore } from "../stores";
 
   // Functions & defs
-  import { handleDraw } from "../ts/draw";
+  import { draw } from "../ts/draw";
 </script>
 
 <!-- Radio buttons to select the thickness mode -->
@@ -15,7 +15,7 @@
   <InputFile
     on:upload={(e) => {
       $PatternStore.thickness.imageUrl = e.detail.file;
-      handleDraw();
+      draw();
     }}
   />
 </InputItem>

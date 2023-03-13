@@ -3,15 +3,7 @@
  */
 
 // All the definitions
-import {
-  Tiles,
-  Tile,
-  Config,
-  ColorConfig,
-  WeightConfig,
-  ThicknessConfig,
-  GradientConfig,
-} from "./defs";
+import type { Config } from "./defs";
 
 // Tiles
 import { tile_wave, tile_peak, tile_line } from "./tiles";
@@ -98,122 +90,6 @@ export function getGrid(config: Config): Grid {
   const grid = unitGrid.fillHeight(gridRect.height);
   grid.setOrigin(gridRect.origin);
   return grid;
-}
-
-/**
- * Tiles
- */
-
-export function getTiles(config: Config): Array<Tile> {
-  // Empty array will store tiles
-  const tiles: Array<Tile> = [];
-
-  // Building table of choices
-  const tiles_table: Array<{ weight: number; id: string }> = [
-    { weight: config.tiles.line.density, id: Tiles[0] },
-    { weight: config.tiles.wave.density, id: Tiles[1] },
-    { weight: config.tiles.peak.density, id: Tiles[2] },
-  ];
-
-  // Appending tiles
-  const count = config.grid.rows * config.grid.columns;
-  for (let i = 0; i < count; i++) {
-    tiles.push(rwc(tiles_table));
-  }
-
-  return tiles;
-}
-
-export function drawTile(
-  tile: string,
-  rect: paper.Rectangle,
-  config: Config
-): paper.Path {
-  //
-  if (tile == "line") {
-    return tile_line(rect);
-  }
-  //
-  else if (tile == "wave") {
-    return tile_wave(rect, choice([-1, 1]), config.tiles.wave.squaring);
-  }
-  //
-  else if (tile == "peak") {
-    return tile_peak(rect, choice([-1, 1]), config.tiles.peak.squaring);
-  }
-}
-
-/**
- * Colors
- */
-
-/**
- * Returns an array of colors based on "tile" ColorMode
- */
-
-export function getColorsTileMode(
-  colorConfig: ColorConfig,
-  tiles: Array<Tile>
-): Array<string> {
-  // Empty array will store colors
-  const colors: Array<string> = [];
-
-  // Iterating over each tile
-  for (let tile of tiles) {
-    colors.push(colorConfig.tile[tile]);
-  }
-
-  return colors;
-}
-
-/**
- * Returns an array of colors based on "distribution" ColorMode
- */
-
-export function getColorsDistributionMode(
-  colorConfig: ColorConfig,
-  count: number
-): Array<string> {
-  // Empty array will store colors
-  const colors: Array<string> = [];
-
-  // Building table of choices
-  const table: Array<WeightConfig> = [];
-  for (let color of Object.keys(colorConfig.distribution)) {
-    table.push({
-      weight: colorConfig.distribution[color],
-      id: color,
-    });
-  }
-
-  // Iterating over each tile
-  for (let i = 0; i < count; i++) {
-    colors.push(rwc(table));
-  }
-
-  return colors;
-}
-
-/**
- * Returns an array of colors based on colorconfig and tiles
- */
-
-export function getColors(
-  colorConfig: ColorConfig,
-  tiles: Array<Tile>
-): Array<string> {
-  //
-  if (colorConfig.mode == "distribution") {
-    return getColorsDistributionMode(colorConfig, tiles.length);
-  }
-  //
-  else if (colorConfig.mode == "tile") {
-    return getColorsTileMode(colorConfig, tiles);
-  }
-  //
-  else if (colorConfig.mode == "gradient") {
-    return undefined;
-  }
 }
 
 /**
@@ -353,36 +229,4 @@ export function mapValues(
   return list.map((value) =>
     mapValue(value, old_min, old_max, new_min, new_max)
   );
-}
-
-/**
- * Gradient
- */
-
-export function getGradient(
-  gradientConfig: GradientConfig,
-  rect: paper.Path
-): any {
-  return {
-    gradient: {
-      stops: [
-        new paper.GradientStop(new paper.Color(gradientConfig.first.color), 0),
-        new paper.GradientStop(new paper.Color(gradientConfig.second.color), 1),
-      ],
-      radial: true,
-    },
-    origin: rect.bounds[gradientConfig.first.position],
-    destination: rect.bounds[gradientConfig.second.position],
-  };
-}
-
-export function drawGradient(gradientConfig: GradientConfig, grid: Grid): void {
-  // Creating rectangle
-  const bg = new paper.Rectangle(
-    new paper.Point(grid.origin),
-    new paper.Size(grid.size)
-  );
-  // Coloring it
-  const bg_path = new paper.Path.Rectangle(bg);
-  (bg_path as any).fillColor = getGradient(gradientConfig, bg_path);
 }

@@ -3,15 +3,8 @@ import { PatternStore } from "../stores";
 
 import paper from "paper";
 
-import {
-  makeCanvas,
-  getGrid,
-  getTiles,
-  getColors,
-  drawTile,
-  getThickness,
-  drawGradient,
-} from "./drawOps";
+import { makeCanvas, getGrid, getThickness } from "./drawOps";
+import { alfabetiAfricani } from "./drawSVG";
 
 export async function draw() {
   // Getting store with data
@@ -30,16 +23,15 @@ export async function draw() {
   // Getting pattern data
   const grid = getGrid(config);
   const cells = grid.getCells();
-  const tiles = getTiles(config);
   const thicknesses = await getThickness(config, grid);
 
   // Drawing pattern
-  for (let i = 0; i < tiles.length; i++) {
+  for (let i = 0; i < cells.length; i++) {
     const cell = cells[i];
     const cell_rect = new paper.Rectangle(cell);
 
     // Drawing tile accordingly
-    const tile_path = new paper.Path.Rectangle(cell_rect);
+    const tile_path = await alfabetiAfricani(cell_rect, config.alphabets);
     tile_path.fillColor = new paper.Color("black");
     tile_path.scale(thicknesses[i], cell_rect.center);
   }
@@ -49,12 +41,4 @@ export async function draw() {
    */
 
   (paper.view as any).draw();
-}
-
-// It's super important to have some delay!
-// Some changes might not be captured because of the update speed of Svelte
-export function handleDraw() {
-  setTimeout(function () {
-    draw();
-  }, 10);
 }
