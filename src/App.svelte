@@ -79,7 +79,7 @@
         </InputItem>
       </InputGroup>
       <!-- Thicknesses -->
-      <InputGroup label={"Immagine"}>
+      <InputGroup label={"Alfabeti"}>
         <InputItem>
           <InputAlphabet bind:alfabeti={$PatternStore.alphabets} />
         </InputItem>
